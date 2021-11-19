@@ -1,18 +1,25 @@
-import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductsDto {
+  // categoryId: { type: string; required: true; trim: true };
+  // productName: { type: string; required: true; unique: true; trim: true };
+  // barcode: { type: number; required: true; unique: true; trim: true };
+  // importprice: { type: number; required: true; trim: true };
+  // sellingprice: { type: number; trim: true };
+  // weight: { type: number; required: true; trim: true };
+  // mainimg: { type: string; trim: true };
+  // imgs: { type: string; trim: true };
+  // quantity: { type: number; trim: true };
+  // description: { type: string; trim: true; default: 'Empty description' };
   @ApiProperty({
-    example: '1',
+    example: '6197432b4d4b3f1fd9f42cd4',
     required: false,
     format: 'string',
   })
   @IsString()
   @IsNotEmpty()
-  categoryId: {
-    type: number;
-  };
+  categoryId: number;
 
   @ApiProperty({
     example: 'product name',
@@ -23,12 +30,59 @@ export class CreateProductsDto {
   })
   @IsString()
   @IsNotEmpty()
-  productname: {
-    type: string;
-  };
+  productName: string;
 
   @ApiProperty({
-    example: '1000',
+    example: 1000,
+    required: true,
+    format: 'number',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  importprice: number;
+
+  @ApiProperty({
+    example: 0,
+    required: true,
+    format: 'number',
+    minLength: 6,
+    maxLength: 24,
+  })
+  @IsNumber()
+  @IsOptional()
+  sellingprice: number;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    format: 'number',
+    minLength: 6,
+    maxLength: 24,
+  })
+  @IsNumber()
+  @IsOptional()
+  weight: number;
+
+  @ApiProperty({
+    example: 'None',
+    required: false,
+    format: 'string',
+  })
+  @IsOptional()
+  @IsString()
+  mainimg: string;
+
+  @ApiProperty({
+    example: 'None',
+    required: false,
+    format: 'string',
+  })
+  @IsOptional()
+  @IsString()
+  imgs: string;
+
+  @ApiProperty({
+    example: 1,
     required: true,
     format: 'number',
     minLength: 6,
@@ -36,85 +90,16 @@ export class CreateProductsDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  importprice: {
-    type: number;
-    default: 0;
-  };
-
-  @ApiProperty({
-    example: '0',
-    required: true,
-    format: 'email',
-    minLength: 6,
-    maxLength: 24,
-  })
-  @IsNumber()
-  @IsOptional()
-  sellingprice: {
-    type: number;
-    default: 0;
-  };
-
-  @ApiProperty({
-    example: '1',
-    required: true,
-    format: 'email',
-    minLength: 6,
-    maxLength: 24,
-  })
-  @IsNumber()
-  @IsOptional()
-  weight: {
-    type: number;
-    default: 1;
-  };
-
-  @ApiProperty({
-    example: 'None',
-    required: false,
-    format: 'email',
-  })
-  @IsOptional()
-  @IsString()
-  mainimg: {
-    type: string;
-  };
-
-  @ApiProperty({
-    example: 'None',
-    required: false,
-    format: 'email',
-  })
-  @IsOptional()
-  @IsString()
-  imgs: {
-    type: string;
-  };
-
-  @ApiProperty({
-    example: '1',
-    required: true,
-    format: 'email',
-    minLength: 6,
-    maxLength: 24,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  quantity: {
-    type: number;
-    default: 1;
-  };
+  quantity: number;
 
   @ApiProperty({
     example: 'Empty description',
     required: false,
-    format: 'email',
+    format: 'string',
     minLength: 6,
     maxLength: 24,
   })
   @IsString()
   @IsOptional()
-  description: {
-    type: string;
-  };
+  description: string;
 }

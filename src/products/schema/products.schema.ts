@@ -2,46 +2,15 @@ import { Schema } from 'mongoose';
 
 const PRODUCTS_MODEL = 'products';
 const ProductsSchema = new Schema({
-  isAdmin: {
-    type: Boolean,
-    // select: true,
-    default: false,
-  },
-  categoryId: {
-    type: String,
-  },
-  barcode: {
-    type: String,
-    unique: true,
-    default: 0,
-  },
-  importprice: {
-    type: Number,
-    default: 0,
-  },
-  sellingprice: {
-    type: Number,
-    default: 0,
-  },
-  weight: {
-    type: Number,
-    default: 1,
-  },
-  mainimg: {
-    type: String,
-  },
-  imgs: {
-    type: String,
-    default: '',
-  },
-  quantity: {
-    type: Number,
-    default: 1,
-  },
-  description: {
-    type: String,
-    default: 'Description empty',
-  },
+  categoryId: { type: String, required: true, trim: true },
+  productName: { type: String, required: true, unique: true, trim: true },
+  importprice: { type: Number, required: true, trim: true },
+  sellingprice: { type: Number, trim: true },
+  weight: { type: Number, required: true, trim: true },
+  mainimg: { type: String, trim: true },
+  imgs: { type: String, trim: true },
+  quantity: { type: Number, trim: true },
+  description: { type: String, trim: true, default: 'Empty description' },
 });
 
 export { ProductsSchema, PRODUCTS_MODEL };

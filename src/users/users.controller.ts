@@ -18,14 +18,14 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly UsersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiTags('Users')
   @ApiOperation({ summary: 'Get all user' })
   @HttpCode(HttpStatus.OK)
   @Get()
   all() {
-    return this.UsersService.all();
+    return this.usersService.all();
   }
 
   @ApiTags('Users')
@@ -34,7 +34,7 @@ export class UsersController {
   @Post('register')
   @UsePipes(new ValidationPipe({ transform: true }))
   async register(@Body() creatUsersDto: CreateUsersDto) {
-    return this.UsersService.register(creatUsersDto);
+    return this.usersService.register(creatUsersDto);
   }
 
   // @ApiTags('Users')
@@ -42,7 +42,7 @@ export class UsersController {
   // @HttpCode(HttpStatus.OK)
   // @Post('login')
   // async login(@Body() loginUserDto: LoginUserDto) {
-  //   return this.UsersService.login(loginUserDto);
+  //   return this.usersService.login(loginUserDto);
   // }
 
   @ApiTags('Users')
@@ -50,7 +50,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.UsersService.deleteUser(id);
+    return this.usersService.deleteUser(id);
   }
 
   @ApiTags('Users')
@@ -62,7 +62,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.UsersService.updateUser(id, updateUserDto);
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @ApiTags('Users')
@@ -70,7 +70,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @Get('/tok/:token')
   async verify(@Param('token') token: string) {
-    return this.UsersService.verify(token);
+    return this.usersService.verify(token);
   }
 
   @ApiTags('Users')
@@ -78,6 +78,6 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   async isAdmin(@Param('id') id: string) {
-    return this.UsersService.isAdmin(id);
+    return this.usersService.isAdmin(id);
   }
 }

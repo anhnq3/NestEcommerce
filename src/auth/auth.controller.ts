@@ -17,7 +17,7 @@ import { ResetPasswordDto } from './dto/auth-resetPassword.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly AuthService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   // @Get()
   // testing() {
@@ -30,7 +30,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Post('login')
   async login(@Body() loginAuthDto: LoginAuthDto) {
-    return this.AuthService.login(loginAuthDto);
+    return this.authService.login(loginAuthDto);
   }
 
   @ApiTags('Auth')
@@ -40,7 +40,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async forgot(@Body() forgotAuthDto: ForgotAuthDto) {
     // const { email } = forgotAuthDto;
-    return this.AuthService.forgot(forgotAuthDto);
+    return this.authService.forgot(forgotAuthDto);
   }
 
   @ApiTags('Auth')
@@ -51,6 +51,6 @@ export class AuthController {
     @Param('token') token: string,
     @Body() resetPasswordDto: ResetPasswordDto,
   ) {
-    return this.AuthService.resetPassword(token, resetPasswordDto);
+    return this.authService.resetPassword(token, resetPasswordDto);
   }
 }
