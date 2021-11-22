@@ -32,7 +32,6 @@ export class CategoryController {
   @ApiTags('Category')
   @ApiOperation({ summary: 'Get category by id' })
   @HttpCode(HttpStatus.OK)
-  @UsePipes(new ValidationPipe({ transform: true }))
   @Get(':id')
   async getCategoryById(@Param('id') id: string) {
     return this.categoryService.findCategoryById(id);

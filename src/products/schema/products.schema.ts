@@ -2,7 +2,8 @@ import { Schema } from 'mongoose';
 
 const PRODUCTS_MODEL = 'products';
 const ProductsSchema = new Schema({
-  categoryId: { type: String, required: true, trim: true },
+  // categoryId: { type: String, required: true, trim: true },
+  categoryId: { type: Schema.Types.ObjectId, ref: 'category' },
   productName: { type: String, required: true, unique: true, trim: true },
   importprice: { type: Number, required: true, trim: true },
   sellingprice: { type: Number, trim: true },

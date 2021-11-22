@@ -21,7 +21,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get all products' })
   @HttpCode(HttpStatus.OK)
   @Get()
-  get() {
+  getAll() {
     return this.productsService.all();
   }
 
