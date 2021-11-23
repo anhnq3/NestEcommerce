@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -12,12 +13,13 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProductsDto } from './dto/products-create.dto';
+import { UpdateProductDto } from './dto/products-update.dto';
 import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-  @ApiTags('Products')
+  @ApiTags('Product')
   @ApiOperation({ summary: 'Get all products' })
   @HttpCode(HttpStatus.OK)
   @Get()
@@ -25,7 +27,7 @@ export class ProductsController {
     return this.productsService.all();
   }
 
-  @ApiTags('Products')
+  @ApiTags('Product')
   @ApiOperation({ summary: 'Get product by Id' })
   @HttpCode(HttpStatus.OK)
   @Get(':id')
@@ -33,7 +35,7 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
-  @ApiTags('Products')
+  @ApiTags('Product')
   @ApiOperation({ summary: 'Create a product' })
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -41,5 +43,24 @@ export class ProductsController {
   async createProduct(@Body() createProductsDto: CreateProductsDto) {
     return this.productsService.createProduct(createProductsDto);
   }
-  // @Put()
+
+  @ApiTags('Product')
+  @ApiOperation({ summary: 'Update a product' })
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Put(':id')
+  async updateProductById(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productsService.updateProductById(id, updateProductDto);
+  }
+
+  @ApiTags('Product')
+  @ApiOperation({ summary: 'Delete a product' })
+  @HttpCode(HttpStatus.OK)
+  @Delete(':id')
+  async deleteProductById(@Param('id') id: string) {
+    return this.productsService.deleteProductById(id);
+  }
 }

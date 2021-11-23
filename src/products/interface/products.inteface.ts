@@ -1,8 +1,10 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 export interface Products {
-  readonly categoryId: string;
+  readonly category: Schema.Types.ObjectId;
+  readonly flashSales: Schema.Types.ObjectId;
   readonly productName: string;
+  readonly productCode: string;
   readonly importprice: number;
   readonly sellingprice: number;
   readonly weight: number;

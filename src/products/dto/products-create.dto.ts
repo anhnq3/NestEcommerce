@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { Schema } from 'mongoose';
 
 export class CreateProductsDto {
   // categoryId: { type: string; required: true; trim: true };
@@ -23,10 +25,18 @@ export class CreateProductsDto {
     required: false,
     format: 'string',
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @IsMongoId()
-  categoryId: string;
+  category: Schema.Types.ObjectId;
+
+  @ApiProperty({
+    example: '6197432b4d4b3f1fd9f42cd4',
+    required: false,
+    format: 'string',
+  })
+  @IsOptional()
+  @IsMongoId()
+  flashsales: Schema.Types.ObjectId;
 
   @ApiProperty({
     example: 'product name',
@@ -38,6 +48,14 @@ export class CreateProductsDto {
   @IsString()
   @IsNotEmpty()
   productName: string;
+
+  @ApiProperty({
+    example: 'PRODUCT1',
+    format: 'string',
+  })
+  @IsString()
+  @IsOptional()
+  productCode: string;
 
   @ApiProperty({
     example: 1000,
@@ -80,12 +98,13 @@ export class CreateProductsDto {
   mainimg: string;
 
   @ApiProperty({
-    example: 'None',
+    example: ['img1', 'img2'],
     required: false,
     format: 'string',
   })
   @IsOptional()
-  @IsString()
+  @IsArray()
+  // @IsString()
   imgs: string;
 
   @ApiProperty({

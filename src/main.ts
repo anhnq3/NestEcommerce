@@ -12,8 +12,10 @@ async function bootstrap() {
     .addTag('Users')
     .addTag('Auth')
     .addTag('Category')
-    .addTag('Products')
+    .addTag('Product')
     .addTag('Flash sale')
+    .addTag('Voucher')
+    .addTag('Order')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
