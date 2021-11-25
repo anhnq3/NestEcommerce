@@ -10,6 +10,9 @@ import { CategoryModule } from './category/category.module';
 import { FlashsalesModule } from './flashsales/flashsales.module';
 import { VouchersModule } from './vouchers/vouchers.module';
 import { OrdersModule } from './orders/orders.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron/cron.service';
+import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -20,6 +23,7 @@ import { OrdersModule } from './orders/orders.module';
         useNewUrlParser: true,
       }),
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
     AuthModule,
     ProductsModule,
@@ -27,6 +31,7 @@ import { OrdersModule } from './orders/orders.module';
     FlashsalesModule,
     VouchersModule,
     OrdersModule,
+    CronModule,
   ],
   controllers: [AppController],
   providers: [AppService],

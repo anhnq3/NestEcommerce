@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
+  FlashSalesSchema,
+  FLASHSALES_MODEL,
+} from 'src/flashsales/schema/flashsales.schema';
+import {
   ProductsSchema,
   PRODUCTS_MODEL,
 } from 'src/products/schema/products.schema';
-import { FlashsalesController } from './flashsales.controller';
-import { FlashsalesService } from './flashsales.service';
-import { FlashSalesSchema, FLASHSALES_MODEL } from './schema/flashsales.schema';
+import { UsersSchema, USERS_MODEL } from 'src/users/shcema/users.schema';
+import { CronService } from './cron.service';
 
 @Module({
   imports: [
@@ -16,8 +19,8 @@ import { FlashSalesSchema, FLASHSALES_MODEL } from './schema/flashsales.schema';
     MongooseModule.forFeature([
       { name: PRODUCTS_MODEL, schema: ProductsSchema },
     ]),
+    MongooseModule.forFeature([{ name: USERS_MODEL, schema: UsersSchema }]),
   ],
-  providers: [FlashsalesService],
-  controllers: [FlashsalesController],
+  providers: [CronService],
 })
-export class FlashsalesModule {}
+export class CronModule {}

@@ -27,12 +27,13 @@ export class ProductsController {
     return this.productsService.all();
   }
 
+  // This can be an Id or product code or product name
   @ApiTags('Product')
   @ApiOperation({ summary: 'Get product by Id' })
   @HttpCode(HttpStatus.OK)
-  @Get(':id')
-  async getProductById(@Param('id') id: string) {
-    return this.productsService.getProductById(id);
+  @Get(':data')
+  async getProductById(@Param('data') data: string) {
+    return this.productsService.getProductById(data);
   }
 
   @ApiTags('Product')

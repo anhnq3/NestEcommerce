@@ -23,7 +23,6 @@ export class CategoryController {
   @ApiTags('Category')
   @ApiOperation({ summary: 'Get all category' })
   @HttpCode(HttpStatus.OK)
-  @UsePipes(new ValidationPipe({ transform: true }))
   @Get()
   async all() {
     return this.categoryService.all();

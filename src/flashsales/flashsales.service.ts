@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ProductsDoc } from 'src/products/interface/products.inteface';
+import { PRODUCTS_MODEL } from 'src/products/schema/products.schema';
 import { CreateFlashSaleDto } from './dto/flashsales-create.dto';
 import { UpdateFlashSaleDto } from './dto/flashsales-update.dto';
 import { FlashSalesDoc } from './interface/flashsale.interface';
@@ -11,10 +13,13 @@ export class FlashsalesService {
   constructor(
     @InjectModel(FLASHSALES_MODEL)
     private readonly FlashSalesModel: Model<FlashSalesDoc>,
+    @InjectModel(PRODUCTS_MODEL)
+    private readonly ProductsModel: Model<ProductsDoc>,
   ) {}
 
   async all(): Promise<FlashSalesDoc[]> {
-    return await this.FlashSalesModel.find();
+    const flashsale = await this.FlashSalesModel.find();
+    return flashsale;
   }
 
   async findFlashSaleById(id: string): Promise<FlashSalesDoc> {
@@ -45,6 +50,20 @@ export class FlashsalesService {
     });
     if (!flashsale)
       throw new HttpException('Flash sale not exists', HttpStatus.BAD_REQUEST);
+    const flashSaleId = flashsale._id;
+    const productHasThisFlashSaleId = await this.ProductsModel.find({
+      flashSales: flashSaleId,
+    });
+    for (let i = 0; i < productHasThisFlashSaleId.length; i++) {
+      const sellingPriceBeforeFlashSale: number =
+        (productHasThisFlashSaleId[i].sellingprice /
+          (100 - flashsale.flashSaleDiscount)) *
+        100;
+      await productHasThisFlashSaleId[i].updateOne({
+        sellingprice: sellingPriceBeforeFlashSale,
+        flashsales: null,
+      });
+    }
     const deleteFlashSale = await flashsale.deleteOne();
     if (deleteFlashSale)
       return {

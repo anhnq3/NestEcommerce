@@ -35,18 +35,16 @@ export class ProductsService {
     if (data.match(/^[0 -9a-fA-F]{24}$/)) {
       const product = await this.ProductsModel.findOne({
         _id: data.match(/^[0 -9a-fA-F]{24}$/),
-      })
-        .populate({
-          path: 'category',
-          select: 'categoryname',
-        })
-        .populate({ path: 'flashsales' });
+      }).populate({
+        path: 'category',
+        select: 'categoryname',
+      });
+      // .populate({ path: 'flashsales' });
       if (!product)
         throw new HttpException(
           'Product id does not exsist',
           HttpStatus.BAD_REQUEST,
         );
-      console.log(product);
       return product;
     } else {
       const product_name = await this.ProductsModel.findOne({
@@ -68,12 +66,9 @@ export class ProductsService {
   async createProduct(
     createProductsDto: CreateProductsDto,
   ): Promise<ProductsDoc> {
-    const { productName, productCode, category } = createProductsDto;
+    const { productName, productCode } = createProductsDto;
     const product_name = await this.ProductsModel.findOne({ productName });
     const product_code = await this.ProductsModel.findOne({ productCode });
-    const category_check = await this.CategoryModel.findOne({ _id: category });
-    if (!category_check)
-      throw new HttpException('Category not found', HttpStatus.BAD_REQUEST);
     if (product_name)
       throw new HttpException('Product name exsisted', HttpStatus.BAD_REQUEST);
     if (product_code)
@@ -85,6 +80,8 @@ export class ProductsService {
   }
 
   async updateProductById(id: string, updateProductDto: UpdateProductDto) {
+    let sellingPriceAfterFlashSale: number;
+
     const { flashsales, category } = updateProductDto;
     const product = await this.ProductsModel.findOne({
       _id: id.match(/^[0 -9a-fA-F]{24}$/),
@@ -102,9 +99,25 @@ export class ProductsService {
       });
       if (!flashsale_check)
         throw new HttpException('Flash sale not found', HttpStatus.BAD_REQUEST);
+      sellingPriceAfterFlashSale =
+        product.sellingprice -
+        (product.sellingprice * flashsale_check.flashSaleDiscount) / 100;
+      if (!product)
+        throw new HttpException('Product not found', HttpStatus.BAD_REQUEST);
+
+      const updated = await product.updateOne({
+        ...updateProductDto,
+        sellingprice: sellingPriceAfterFlashSale,
+      });
+      if (!updated)
+        throw new HttpException('Update failed', HttpStatus.BAD_REQUEST);
+      return {
+        message: 'Update success',
+      };
     }
     if (!product)
       throw new HttpException('Product not found', HttpStatus.BAD_REQUEST);
+
     const updated = await product.updateOne(updateProductDto);
     if (!updated)
       throw new HttpException('Update failed', HttpStatus.BAD_REQUEST);

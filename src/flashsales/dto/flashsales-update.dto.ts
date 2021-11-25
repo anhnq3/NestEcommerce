@@ -10,7 +10,7 @@ export class UpdateFlashSaleDto {
   })
   @IsString()
   @IsOptional()
-  flashSaleName: string;
+  readonly flashSaleName: string;
 
   @ApiProperty({
     example: 1,
@@ -19,7 +19,7 @@ export class UpdateFlashSaleDto {
   })
   @IsNumber()
   @IsOptional()
-  flashSaleQuantity: number;
+  readonly flashSaleQuantity: number;
 
   @ApiProperty({
     example: '2021-11-19T08:20:17.597+08:00',
@@ -29,7 +29,7 @@ export class UpdateFlashSaleDto {
   @IsDate()
   @IsOptional()
   @Type(() => Date)
-  flashSaleStartDate: Date;
+  readonly flashSaleStartDate: Date;
 
   @ApiProperty({
     example: '2021-11-20T08:20:17.597+08:00',
@@ -39,7 +39,7 @@ export class UpdateFlashSaleDto {
   @IsDate()
   @IsOptional()
   @Type(() => Date)
-  flashSaleEndDate: Date;
+  readonly flashSaleEndDate: Date;
 
   @ApiProperty({
     example: 'This is flash sale detail',
@@ -48,7 +48,7 @@ export class UpdateFlashSaleDto {
   })
   @IsString()
   @IsOptional()
-  flashSaleDetail: string;
+  readonly flashSaleDetail: string;
 
   @ApiProperty({
     example: 10,
@@ -56,7 +56,7 @@ export class UpdateFlashSaleDto {
   })
   @IsNumber()
   @IsOptional()
-  flashSaleDiscount: number;
+  readonly flashSaleDiscount: number;
 
   @ApiProperty({
     example: 'active',
@@ -64,7 +64,7 @@ export class UpdateFlashSaleDto {
   })
   @IsString()
   @IsOptional()
-  flashSaleStatus: string;
+  readonly flashSaleStatus: string;
 
   // @ApiProperty({
   //   example: 'CODE',
