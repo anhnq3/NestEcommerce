@@ -1,6 +1,11 @@
 import { Schema } from 'mongoose';
 const ORDERS_MODEL = 'orders';
 const OrdersSchema = new Schema({
+  users: {
+    type: Schema.Types.ObjectId,
+    ref: 'products',
+    default: '000000000000000000000000',
+  },
   products: {
     type: Schema.Types.ObjectId,
     ref: 'products',

@@ -10,7 +10,6 @@ export class LoginAuthDto {
     maxLength: 24,
   })
   @IsString()
-  @Length(6, 24)
   @IsOptional()
   readonly username?: string;
 
@@ -21,7 +20,6 @@ export class LoginAuthDto {
     minLength: 6,
   })
   @IsString()
-  @Length(6)
   @IsOptional()
   readonly email?: string;
 

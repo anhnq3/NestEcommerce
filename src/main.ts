@@ -16,6 +16,10 @@ async function bootstrap() {
     .addTag('Flash sale')
     .addTag('Voucher')
     .addTag('Order')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      // 'access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

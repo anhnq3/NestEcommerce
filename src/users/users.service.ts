@@ -106,7 +106,9 @@ export class UsersService {
   }
 
   async isAdmin(id: string): Promise<any> {
-    const user = await this.usersModel.findOne({ id });
+    const user = await this.usersModel.findOne({
+      _id: id.match(/^[0 -9a-fA-F]{24}$/),
+    });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_GATEWAY);
     return {

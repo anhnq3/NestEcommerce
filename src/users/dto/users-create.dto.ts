@@ -8,12 +8,12 @@ export class CreateUsersDto {
     example: 'username',
     required: true,
     format: 'string',
-    minLength: 6,
+    minLength: 3,
     maxLength: 24,
   })
   @IsString()
   @IsNotEmpty()
-  @Length(6, 24)
+  @Length(3, 24)
   readonly username: string;
 
   @ApiProperty({

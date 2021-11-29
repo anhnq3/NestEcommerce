@@ -8,10 +8,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/helper/jwt-auth.guard';
 import { CreateUsersDto } from 'src/users/dto/users-create.dto';
 import { UpdateUserDto } from './dto/users-update.dto';
 import { UsersService } from './users.service';
@@ -23,6 +25,9 @@ export class UsersController {
   @ApiTags('Users')
   @ApiOperation({ summary: 'Get all user' })
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  // @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @Get()
   all() {
     return this.usersService.all();

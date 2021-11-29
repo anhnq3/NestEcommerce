@@ -56,13 +56,14 @@ export class CronService {
         });
         if (productHasExpiredFlashSale) {
           for (let j = 0; j < productHasExpiredFlashSale.length; j++) {
-            flashsale[i].updateOne({ flashSaleStatus: 'inactive' });
+            await flashsale[i].updateOne({ flashSaleStatus: 'inactive' });
             const sellingPrice =
               (productHasExpiredFlashSale[j].sellingprice / (100 - percent)) *
               100;
             await productHasExpiredFlashSale[i].updateOne({
               sellingprice: sellingPrice,
             });
+            await flashsale[i].deleteOne();
           }
         }
       } else {
@@ -77,7 +78,7 @@ export class CronService {
           const htmlTemplate = `-----------------THERE IS A FLASHSALE TODAY-----------------
           Let's check flash sale today for more detail at: http://localhost:3000/products`;
           for (let i = 0; i < users.length; i++) {
-            let userEmail = users[i].email;
+            // let userEmail = users[i].email;
             sendEmail(
               'anhnq3@vmodev.com',
               // userEmail,

@@ -10,6 +10,14 @@ export class CreateOrderDto {
   })
   @IsMongoId()
   @IsNotEmpty()
+  users: Schema.Types.ObjectId;
+  @ApiProperty({
+    example: '6197432b4d4b3f1fd9f42cd4',
+    required: true,
+    format: 'objectid',
+  })
+  @IsMongoId()
+  @IsNotEmpty()
   products: Schema.Types.ObjectId;
 
   // @ApiProperty({

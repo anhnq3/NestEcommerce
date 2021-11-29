@@ -8,10 +8,13 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProductsDto } from './dto/products-create.dto';
 import { UpdateProductDto } from './dto/products-update.dto';
 import { ProductsService } from './products.service';
@@ -25,6 +28,24 @@ export class ProductsController {
   @Get()
   getAll() {
     return this.productsService.all();
+  }
+
+  // param -1 is sort high to low and 1 is low to high
+  @ApiTags('Product')
+  @ApiOperation({ summary: 'Get all products sort by selling price' })
+  @HttpCode(HttpStatus.OK)
+  @Get('sortbysellingprice/:sort')
+  async getAllSortBySellingPrice(@Param('sort') sort: number) {
+    return this.productsService.getAllSortBySellingPrice(sort);
+  }
+
+  // param -1 is sort high to low and 1 is low to high
+  @ApiTags('Product')
+  @ApiOperation({ summary: 'Get all products sort by selling price' })
+  @HttpCode(HttpStatus.OK)
+  @Get('sortbydate/:sort')
+  getAllSortByDate(@Param('sort') sort: number) {
+    return this.productsService.getAllSortByDate(sort);
   }
 
   // This can be an Id or product code or product name
@@ -63,5 +84,31 @@ export class ProductsController {
   @Delete(':id')
   async deleteProductById(@Param('id') id: string) {
     return this.productsService.deleteProductById(id);
+  }
+
+  @Get('/filter/category/:categoryname')
+  async getProductByCategory(@Param('categoryname') categoryname: string) {
+    return this.productsService.getProductByCategory(categoryname);
+  }
+
+  @Post('upload')
+  @ApiTags('Product')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        comment: { type: 'string' },
+        outletId: { type: 'integer' },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 }

@@ -8,11 +8,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Schema } from 'mongoose';
+import { JwtAuthGuard } from 'src/auth/helper/jwt-auth.guard';
 import { CreateOrderDto } from './dto/order-create.dto';
 import { UpdateOrderDto } from './dto/order-update.dto';
 import { OrdersService } from './orders.service';
@@ -24,6 +26,9 @@ export class OrdersController {
   @ApiTags('Order')
   @ApiOperation({ summary: 'Get all orders' })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  // Bearer co lien quan
+  @ApiBearerAuth()
   @Get()
   getAll() {
     return this.orderService.all();
@@ -32,6 +37,9 @@ export class OrdersController {
   @ApiTags('Order')
   @ApiOperation({ summary: 'Get order by Id' })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  // Bearer co lien quan
+  @ApiBearerAuth()
   @Get(':id')
   getOrderById(@Param('id') id: Schema.Types.ObjectId) {
     return this.orderService.getOrderById(id);
@@ -44,6 +52,9 @@ export class OrdersController {
   @ApiOperation({ summary: 'Create an order' })
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(JwtAuthGuard)
+  // Bearer co lien quan
+  @ApiBearerAuth()
   @Post()
   createOrder(@Body() createOrderDto: CreateOrderDto) {
     return this.orderService.createOrder(createOrderDto);
@@ -52,6 +63,9 @@ export class OrdersController {
   @ApiTags('Order')
   @ApiOperation({ summary: 'Delete an order' })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  // Bearer co lien quan
+  @ApiBearerAuth()
   @Delete(':id')
   deleteOrder(@Param('id') id: string) {
     return this.orderService.deleteOrder(id);
@@ -62,11 +76,11 @@ export class OrdersController {
   @ApiOperation({ summary: 'Update quantity' })
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(JwtAuthGuard)
+  // Bearer co lien quan
+  @ApiBearerAuth()
   @Put(':id')
-  updateOrderQuantity(
-    @Param('id') id: string,
-    @Body() updateOrderDto: UpdateOrderDto,
-  ) {
-    return this.orderService.updateOrderQuantity(id, updateOrderDto);
+  updateOrder(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+    return this.orderService.updateOrder(id, updateOrderDto);
   }
 }

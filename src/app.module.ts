@@ -11,8 +11,8 @@ import { FlashsalesModule } from './flashsales/flashsales.module';
 import { VouchersModule } from './vouchers/vouchers.module';
 import { OrdersModule } from './orders/orders.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CronService } from './cron/cron.service';
 import { CronModule } from './cron/cron.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -22,6 +22,9 @@ import { CronModule } from './cron/cron.module';
         uri: process.env.MONGO_URI,
         useNewUrlParser: true,
       }),
+    }),
+    MulterModule.register({
+      dest: './uploads',
     }),
     ScheduleModule.forRoot(),
     UsersModule,

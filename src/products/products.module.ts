@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MulterModule } from '@nestjs/platform-express';
 import { CategoryModule } from 'src/category/category.module';
 import {
   CategorySchema,
@@ -15,6 +16,9 @@ import { ProductsSchema, PRODUCTS_MODEL } from './schema/products.schema';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './uploads/img',
+    }),
     MongooseModule.forFeature([
       { name: PRODUCTS_MODEL, schema: ProductsSchema },
     ]),

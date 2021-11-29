@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, now } from 'mongoose';
+import { Model } from 'mongoose';
 import { CategoryDoc } from 'src/category/interface/category.interface';
 import { CATEGORY_MODEL } from 'src/category/schema/category.schema';
 import { FlashSalesDoc } from 'src/flashsales/interface/flashsale.interface';
@@ -23,12 +23,62 @@ export class ProductsService {
 
   async all(): Promise<ProductsDoc[]> {
     const product = this.ProductsModel.find()
+      // .sort({ sellingprice: -1 })
       .populate({
         path: 'category',
         select: 'categoryname',
       })
-      .populate({ path: 'flashsales' });
+      .populate({
+        path: 'flashsales',
+        select: ['flashSaleName', 'flashSaleQuantity', 'flashSaleDiscount'],
+      });
     return product;
+  }
+
+  async getAllSortBySellingPrice(sort: number): Promise<ProductsDoc[]> {
+    const product = this.ProductsModel.find()
+      .sort({ sellingprice: sort })
+      .populate({
+        path: 'category',
+        select: 'categoryname',
+      })
+      .populate({
+        path: 'flashsales',
+        select: ['flashSaleName', 'flashSaleQuantity', 'flashSaleDiscount'],
+      });
+    return product;
+  }
+
+  async getAllSortByDate(sort: number): Promise<ProductsDoc[]> {
+    const product = this.ProductsModel.find()
+      .sort({ createdAt: sort })
+      .populate({
+        path: 'category',
+        select: 'categoryname',
+      })
+      .populate({
+        path: 'flashsales',
+        select: ['flashSaleName', 'flashSaleQuantity', 'flashSaleDiscount'],
+      });
+    return product;
+  }
+
+  async getProductByCategory(categoryname: string) {
+    const category = await this.CategoryModel.findOne({
+      categoryname: categoryname,
+    });
+    if (!category)
+      throw new HttpException(
+        'Category name does not exsist',
+        HttpStatus.BAD_REQUEST,
+      );
+    // const product = await this.ProductsModel.find({
+    //   category: category.id,
+    // }).getFilter();
+    // console.log(product);
+    return this.ProductsModel.find({
+      category: category.id,
+    });
   }
 
   async getProductById(data: string): Promise<ProductsDoc> {
@@ -104,12 +154,24 @@ export class ProductsService {
         (product.sellingprice * flashsale_check.flashSaleDiscount) / 100;
       if (!product)
         throw new HttpException('Product not found', HttpStatus.BAD_REQUEST);
-
+      const flashSaleQuantityAfterApply = flashsale_check.flashSaleQuantity - 1;
+      console.log(flashsale_check.flashSaleQuantity);
+      if (flashSaleQuantityAfterApply < 0)
+        throw new HttpException(
+          'There is no flash sale for this code left',
+          HttpStatus.BAD_REQUEST,
+        );
       const updated = await product.updateOne({
         ...updateProductDto,
         sellingprice: sellingPriceAfterFlashSale,
       });
       if (!updated)
+        throw new HttpException('Update failed', HttpStatus.BAD_REQUEST);
+
+      const updateFlashSale = await flashsale_check.updateOne({
+        flashSaleQuantity: flashSaleQuantityAfterApply,
+      });
+      if (!updateFlashSale)
         throw new HttpException('Update failed', HttpStatus.BAD_REQUEST);
       return {
         message: 'Update success',

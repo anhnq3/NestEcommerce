@@ -113,7 +113,7 @@ export class OrdersService {
     }
   }
 
-  async updateOrderQuantity(id: string, updateOrderDto: UpdateOrderDto) {
+  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
     const { quantity } = updateOrderDto;
     const checkOrder = await this.OrdersModel.findById(id);
     const productId = checkOrder.products;

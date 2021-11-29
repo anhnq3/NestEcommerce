@@ -41,14 +41,12 @@ export class AuthService {
       id: user._id,
       username: user.username,
       email: user.email,
+      isAdmin: user.isAdmin,
     };
     return {
       id: user._id,
       username: user.username,
-      accessToken: this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET_TOKEN,
-        expiresIn: process.env.JWT_SERCRET_TOKEN_EXPIRES,
-      }),
+      accessToken: this.jwtService.sign(payload),
       refreshToken: this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET_REFRESH_TOKEN,
         expiresIn: process.env.JWT_SERCRET_REFRESH_TOKEN_EXPIRES,
@@ -114,5 +112,20 @@ export class AuthService {
     return {
       message: 'Password has reseted',
     };
+  }
+
+  async validatorUser(username: string, email: string): Promise<any> {
+    return this.userModel.findOne({ username, email });
+  }
+
+  async getMe(payload: any) {
+    const user = await this.userModel.findOne({
+      username: payload.username,
+      email: payload.email,
+      isAdmin: payload.isAdmin,
+    });
+    if (!user)
+      throw new HttpException('User not exists', HttpStatus.BAD_REQUEST);
+    return user;
   }
 }
